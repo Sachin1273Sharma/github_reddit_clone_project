@@ -29,13 +29,20 @@ public class SubRedditController {
         List<Post> posts= postService.getAllPosts();
         model.addAttribute("posts",posts);
         model.addAttribute("subReddits",subRedditService.getAllSubReddits());
-        System.out.println(subRedditService.getAllSubReddits());
+        model.addAttribute("subRedditNamesList",subRedditService.getAllSubRedditsByName());
         return "view-sub";
     }
 
     @PostMapping("/sub/new")
     public String subRedditCreate(@ModelAttribute SubReddit subReddit, Model model){
         subReddit.setCreatedAt(LocalDateTime.now());
+        subReddit.setName("r/" + subReddit.getName());
+        int randomAvatarIndex = (int) (Math.random() * 15) + 1;
+
+        // Create the avatar path dynamically
+        String avatarPath = "/images/avatar/" + randomAvatarIndex + ".svg";
+        subReddit.setAvatar(avatarPath);
+
         subRedditService.createSubReddit(subReddit);
         return "redirect:/sub";
     }

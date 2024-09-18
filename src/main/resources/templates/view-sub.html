@@ -101,12 +101,15 @@
         }
 
         .community-list li {
-            background-color: #e0e0e0;
-            border: 1px solid #ddd;
+            background:white;
+            display:flex;
+            align-items: center;
+            justify-content:center;
+            gap:10px;
             border-radius: 4px;
-            padding: 10px;
-            margin-bottom: 5px;
+            padding: 2px;
             font-size: 0.9em;
+            margin-bottom:5px;
         }
 
         .content {
@@ -253,6 +256,29 @@
                 width: 100%; /* Full width on small screens */
             }
         }
+        .post-banner {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f5f5f5;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+
+        .subreddit-details h3 {
+            margin: 0;
+            font-size: 1.2em;
+            color: #333;
+        }
 
     </style>
 </head>
@@ -271,7 +297,7 @@
 </nav>
 
 <div class="sidebar">
-    <a href="/posts/new">
+    <a href="/posts/new" >
         <button id="createPostBtn">Create Post</button>
     </a>
     <div class="left-div">
@@ -283,7 +309,10 @@
     <div class="community-list">
         <h3>Communities</h3>
         <ul>
-            <li th:each="subReddit : ${subReddits}" th:text="${subReddit.name}">Community Name</li>
+            <li th:each="subReddit : ${subReddits}" class="particular-avatar">
+                <img th:src="${subReddit.avatar}" alt="Avatar" style="width:50%;height: 50px; width: 50px; border-radius: 50%;;object-fit: cover;"/>
+                <span th:text="${subReddit.name}" style="width:50%;">Community Name</span>
+            </li>
         </ul>
     </div>
 </div>
@@ -295,6 +324,12 @@
         </div>
         <div th:if="${!#lists.isEmpty(posts)}">
             <div th:each="post : ${posts}" class="post-card">
+                <div class="post-banner">
+                    <img th:src="${post.subReddit.avatar}" alt="Subreddit Avatar" class="avatar" />
+                    <div class="subreddit-details">
+                        <h3 th:text="${post.subReddit.name}">Subreddit Name</h3>
+                    </div>
+                </div>
                 <h3 th:text="${post.title}">Post Title</h3>
                 <p><strong>Subreddit:</strong> <span th:text="${post.subReddit.name}">Subreddit Name</span></p>
                 <div class="post-image">
@@ -318,7 +353,7 @@
                    class="new-subreddit-name-input" minlength="3" maxlength="30" required><br><br>
             <textarea th:field="*{description}" id="newSubRedditDescription" name="newSubRedditDescription" placeholder="Community Description"
                       class="new-subreddit-description-input" rows="4" maxlength="500"></textarea><br><br>
-            <span id="subredditNameError" style="color: red;"></span>
+           <p><span id="subredditNameError" style="color: red;"></span></p>
             <strong>Some Rules for making a new community</strong>
             <ul>
                 <li>SubReddit Name must be unique</li>
@@ -333,7 +368,7 @@
     </div>
 </div>
 
-<script>
+<script th:inline="javascript">
     var modal = document.getElementById("myModal");
     var btn = document.getElementById("myBtn");
     var createPostBtn = document.getElementById("createPostBtn");
@@ -350,11 +385,20 @@
         if (event.target == modal) {
             modal.style.display = "none";
         }
-    }
-
+    };
+    /*<![CDATA[*/
+    var previousSubRedditNames = /*[[${subRedditNamesList}]]*/ [];
     function validateSubRedditName() {
+        var newSubRedditName = document.getElementById("newSubRedditName").value;
+
+        if (previousSubRedditNames.includes(newSubRedditName)) {
+            document.getElementById("subredditNameError").innerText = "Subreddit name already exists!";
+            return false;
+        }
         return true;
     }
+
+    /*]]>*/
 </script>
 </body>
 </html>

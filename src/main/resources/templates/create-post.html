@@ -165,7 +165,6 @@
     const dropdownOptions = document.getElementById('dropdownOptions');
     const hiddenInput = document.getElementById('selectedSubReddit');
 
-    // Toggle dropdown visibility
     dropdownSelect.addEventListener('click', function(event) {
       event.stopPropagation(); // Prevent event from bubbling up
       if (dropdownOptions.style.display === 'block') {
@@ -175,7 +174,7 @@
       }
     });
 
-    // Select an option
+
     dropdownOptions.addEventListener('click', function(event) {
       if (event.target.tagName === 'DIV') {
         dropdownSelect.textContent = event.target.textContent;
@@ -184,7 +183,6 @@
       }
     });
 
-    // Close the dropdown if clicking outside of it
     document.addEventListener('click', function(event) {
       if (!dropdownSelect.contains(event.target) && !dropdownOptions.contains(event.target)) {
         dropdownOptions.style.display = 'none';

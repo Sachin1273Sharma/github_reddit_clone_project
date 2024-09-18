@@ -61,7 +61,6 @@ public class PostController {
 
         post.setCreatedAt(LocalDateTime.now());
         postService.saveCreatePost(post);
-        List<Post> posts = postService.getAllPosts();
         return "redirect:/sub";
     }
 

@@ -17,7 +17,15 @@ public class SubReddit {
 
     private String description;
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
     private LocalDateTime createdAt;
+    private String avatar;
 
     @OneToMany(mappedBy = "subReddit", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
